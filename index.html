@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>性向測驗：你是哪一種冒險者？</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      color: #333;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    .question {
+      background: #ffffffdd;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #ff8a65;
+      color: white;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #ff7043;
+    }
+    #result {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧭 性向測驗：你是哪一種冒險者？</h1>
+
+  <div id="quiz"></div>
+  <div id="result"></div>
+
+  <script>
+    const questions = [
+      {
+        question: "當你面對未知的挑戰時，你會？",
+        options: [
+          { text: "勇敢迎上，靠直覺行動", type: "warrior" },
+          { text: "先觀察再行動，策略至上", type: "mage" },
+          { text: "研究所有細節，資料就是力量", type: "scholar" },
+        ]
+      },
+      {
+        question: "你在團隊中通常扮演什麼角色？",
+        options: [
+          { text: "領導與決策者", type: "warrior" },
+          { text: "智囊軍師", type: "mage" },
+          { text: "後勤與紀錄管理", type: "scholar" },
+        ]
+      },
+      {
+        question: "面對衝突時你會？",
+        options: [
+          { text: "直接對話解決", type: "warrior" },
+          { text: "用冷靜分析拆招", type: "mage" },
+          { text: "記錄事件與冷靜觀察", type: "scholar" },
+        ]
+      }
+    ];
+
+    let scores = {
+      warrior: 0,
+      mage: 0,
+      scholar: 0
+    };
+
+    let current = 0;
+    const quizContainer = document.getElementById("quiz");
+    const resultContainer = document.getElementById("result");
+
+    function showQuestion() {
+      quizContainer.innerHTML = "";
+      if (current < questions.length) {
+        const q = questions[current];
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `<h2>第 ${current + 1} 題：${q.question}</h2>`;
+        q.options.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.textContent = opt.text;
+          btn.onclick = () => {
+            scores[opt.type]++;
+            current++;
+            showQuestion();
+          };
+          div.appendChild(btn);
+        });
+        quizContainer.appendChild(div);
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      let maxType = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+      let message = "";
+
+      switch(maxType) {
+        case "warrior":
+          message = "⚔️ 你是【勇者型】冒險者！面對困難你總是第一個衝上去，領導他人，行動迅速。";
+          break;
+        case "mage":
+          message = "🪄 你是【智者型】冒險者！你喜歡分析與策略，遇事冷靜，喜歡掌握全局。";
+          break;
+        case "scholar":
+          message = "📚 你是【學者型】冒險者！你觀察敏銳、善於整理資訊，是團隊中穩定的後盾。";
+          break;
+      }
+
+      resultContainer.textContent = message;
+    }
+
+    showQuestion();
+  </script>
+
+</body>
+</html>
